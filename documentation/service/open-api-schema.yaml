@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  title: AI Safety Glossary API
+  version: 1.0.0
+  description: API for managing and retrieving terms related to AI safety and alignment.
+paths:
+  /api/terms:
+    get:
+      summary: List all terms
+      description: Retrieve a list of all terms in the database, including their enrichments.
+      responses:
+        "200":
+          description: A list of terms with their enrichments.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  $ref: "#/components/schemas/Term"
+        "401":
+          description: Unauthorized. Only the pipeline user is allowed to access this endpoint.
+    post:
+      summary: Create a new term
+      description: Add a new term to the database. The term will initially have a `pending` status.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: Name of the term. Must be unique.
+                  example: "Alignment"
+                justification:
+                  type: string
+                  description: Justification for the term's relevance.
+                  example: "This term is foundational to AI safety."
+      responses:
+        "201":
+          description: Term successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Term"
+        "400":
+          description: Bad request. Invalid input data.
+        "401":
+          description: Unauthorized. Only the pipeline user is allowed to access this endpoint.
+  /api/tags:
+    get:
+      summary: List all tags
+      description: Retrieve a list of all tags in the database.
+      responses:
+        "200":
+          description: A list of tags.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Tag"
+        "401":
+          description: Unauthorized. Only the pipeline user is allowed to access this endpoint.
+components:
+  schemas:
+    Term:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the term.
+        name:
+          type: string
+          description: Name of the term.
+        status:
+          type: string
+          enum: [pending, rejected, approved]
+          description: Indicates if the term is relevant to AI safety. This is determined by the admin user.
+        review:
+          type: string
+          description: Justification for the approval or rejection of the term. This is created by the admin user.
+        enrichments:
+          type: array
+          items:
+            $ref: "#/components/schemas/TermEnrichment"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+            status:
+              type: string
+              enum: [pending, rejected, approved]
+              description: Indicates if the tag is relevant to AI safety. This is determined by the admin user.
+            review:
+              type: string
+              description: Justification for the approval or rejection of the tag. This is created by the admin user.
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the tag.
+        name:
+          type: string
+          description: Name of the tag.
+        description:
+          type: string
+          description: Description of the tag.
+    TermEnrichment:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the enrichment.
+        term_id:
+          type: string
+          description: Foreign key to the term.
+        description:
+          type: string
+          description: Additional information about the term.
+        status:
+          type: string
+          enum: [pending, rejected, approved]
+          description: Indicates if the enrichment is good.
+        review:
+          type: string
+          description: Justification for the approval or rejection of the enrichment.
