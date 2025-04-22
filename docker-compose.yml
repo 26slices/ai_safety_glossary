@@ -1,0 +1,8 @@
+services:
+  develop:
+    container_name: ai-safety-develop
+    build:
+      context: ./.docker
+    volumes:
+      - .:/app
+    tty: true
