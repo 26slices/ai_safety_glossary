@@ -1,5 +1,5 @@
 services:
-  develop:
+  ai-safety-develop:
     container_name: ai-safety-develop
     build:
       context: ./.docker
