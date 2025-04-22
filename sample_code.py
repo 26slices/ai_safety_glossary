@@ -1,6 +1,6 @@
 
 import requests
-import json # Import json for pretty printing the output
+import json
 
 url = "https://www.lesswrong.com/graphql"
 query = """
@@ -8,7 +8,7 @@ query {
   posts(input: {
     terms: {
       view: "top"
-      limit: 2000
+      limit: 2
       after: "2022-01-01T00:00:00.000Z"
     }
   }) {
@@ -32,7 +32,9 @@ headers = {
     'Referer': 'https://www.lesswrong.com/graphiql',
     'Origin': 'https://www.lesswrong.com',
     # Adding a common browser User-Agent can also help sometimes
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+    'User-Agent': ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+                   'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 '
+                   'Safari/537.36')
 }
 
 try:
