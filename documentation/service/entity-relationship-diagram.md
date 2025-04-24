@@ -2,6 +2,15 @@
 
 ```mermaid
 erDiagram
+    USER {
+        int id PK
+        string username
+        string email
+        string password_hash
+        string role
+        datetime created_at
+        datetime updated_at
+    }
     TERM {
         int id PK
         string name
@@ -74,4 +83,10 @@ erDiagram
     TERM ||--o{ TERM_TAG : "tagged with"
     TAG ||--o{ TERM_TAG : "used in"
     TERM ||--o{ LINK : "linked to"
+    TERM ||--o{ USER : "created/updated/reviewed by"
+    TERM_ALIAS ||--o{ USER : "created/updated by"
+    TERM_ENRICHMENT ||--o{ USER : "created/updated/reviewed by"
+    TERM_TAG ||--o{ USER : "created/updated/reviewed by"
+    TAG ||--o{ USER : "created/updated by"
+    LINK ||--o{ USER : "created/updated by"
 ```
